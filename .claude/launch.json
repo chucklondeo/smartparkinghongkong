@@ -1,0 +1,21 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Londeo Dev Server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000,
+      "autoPort": true,
+      "cwd": "C:\\Users\\win\\Documents\\Claude\\Projects\\Hong Kong Smart Parking"
+    },
+    {
+      "name": "Londeo Production Preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start"],
+      "port": 3000,
+      "autoPort": true,
+      "cwd": "C:\\Users\\win\\Documents\\Claude\\Projects\\Hong Kong Smart Parking"
+    }
+  ]
+}
