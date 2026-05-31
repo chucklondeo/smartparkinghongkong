@@ -28,8 +28,13 @@ export default function Hero({ lang }: Props) {
     const particles: { x: number; y: number; vx: number; vy: number; life: number; maxLife: number }[] = [];
     const lines: { x1: number; y1: number; x2: number; y2: number; progress: number; speed: number; color: string }[] = [];
 
+    // Reduce count on mobile / low-end devices
+    const isMobile = window.innerWidth < 768;
+    const lineCount = isMobile ? 8 : 16;
+    const particleCount = isMobile ? 25 : 50;
+
     // Create data flow lines
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < lineCount; i++) {
       lines.push({
         x1: Math.random() * canvas.width,
         y1: Math.random() * canvas.height,
@@ -42,7 +47,7 @@ export default function Hero({ lang }: Props) {
     }
 
     // Create particles
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * (canvas.width || 1200),
         y: Math.random() * (canvas.height || 800),
@@ -54,6 +59,13 @@ export default function Hero({ lang }: Props) {
     }
 
     let raf: number;
+    // Pause animation when tab is hidden to save CPU
+    const handleVisibility = () => {
+      if (document.hidden) cancelAnimationFrame(raf);
+      else draw();
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -127,6 +139,7 @@ export default function Hero({ lang }: Props) {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
 
