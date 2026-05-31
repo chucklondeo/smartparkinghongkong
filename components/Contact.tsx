@@ -1,24 +1,53 @@
 "use client";
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { Send, CheckCircle, ArrowRight } from "lucide-react";
+import { Send, CheckCircle, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import type { Lang } from "@/lib/i18n";
 import { translations } from "@/lib/i18n";
+import { createClient } from "@/lib/supabase/client";
 
 interface Props { lang: Lang }
+
+type Status = "idle" | "submitting" | "success" | "error";
 
 export default function Contact({ lang }: Props) {
   const t = translations[lang].contact;
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
   const [form, setForm] = useState({
     name: "", company: "", email: "", whatsapp: "", projectType: "", message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setStatus("submitting");
+    setErrorMsg("");
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.from("contact_submissions").insert({
+        name:         form.name,
+        company:      form.company,
+        email:        form.email,
+        whatsapp:     form.whatsapp || null,
+        project_type: form.projectType || null,
+        message:      form.message || null,
+        lang,
+      });
+
+      if (error) throw error;
+      setStatus("success");
+    } catch (err: unknown) {
+      console.error("Contact form error:", err);
+      setErrorMsg(
+        lang === "en"
+          ? "Something went wrong. Please try again or email us directly."
+          : "提交失敗，請稍後再試或直接電郵聯絡我們。"
+      );
+      setStatus("error");
+    }
   };
 
   return (
@@ -54,7 +83,7 @@ export default function Contact({ lang }: Props) {
             className="lg:col-span-3"
           >
             <div className="glass-card rounded-3xl border border-neon-blue/20 p-8">
-              {submitted ? (
+              {status === "success" ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -70,7 +99,7 @@ export default function Contact({ lang }: Props) {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     {[
-                      { key: "name", label: t.form.name, type: "text" },
+                      { key: "name",    label: t.form.name,    type: "text" },
                       { key: "company", label: t.form.company, type: "text" },
                     ].map(({ key, label, type }) => (
                       <div key={key}>
@@ -78,9 +107,10 @@ export default function Contact({ lang }: Props) {
                         <input
                           type={type}
                           required
+                          disabled={status === "submitting"}
                           value={form[key as keyof typeof form]}
                           onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                          className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none focus:ring-0 transition-colors bg-transparent"
+                          className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none focus:ring-0 transition-colors bg-transparent disabled:opacity-50"
                         />
                       </div>
                     ))}
@@ -92,19 +122,21 @@ export default function Contact({ lang }: Props) {
                       <input
                         type="email"
                         required
+                        disabled={status === "submitting"}
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-transparent"
+                        className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-transparent disabled:opacity-50"
                       />
                     </div>
                     <div>
                       <label className="block text-xs text-white/40 mb-2 uppercase tracking-wider">{t.form.whatsapp}</label>
                       <input
                         type="tel"
+                        disabled={status === "submitting"}
                         value={form.whatsapp}
                         onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
                         placeholder="+852"
-                        className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-transparent"
+                        className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-transparent disabled:opacity-50"
                       />
                     </div>
                   </div>
@@ -113,9 +145,10 @@ export default function Contact({ lang }: Props) {
                     <label className="block text-xs text-white/40 mb-2 uppercase tracking-wider">{t.form.projectType}</label>
                     <select
                       required
+                      disabled={status === "submitting"}
                       value={form.projectType}
                       onChange={(e) => setForm({ ...form, projectType: e.target.value })}
-                      className="w-full glass px-4 py-3 rounded-xl text-sm text-white border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-dark-800 appearance-none"
+                      className="w-full glass px-4 py-3 rounded-xl text-sm text-white border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-dark-800 appearance-none disabled:opacity-50"
                     >
                       <option value="" disabled className="bg-dark-800">
                         {lang === "en" ? "Select project type..." : "請選擇項目類型..."}
@@ -130,20 +163,43 @@ export default function Contact({ lang }: Props) {
                     <label className="block text-xs text-white/40 mb-2 uppercase tracking-wider">{t.form.message}</label>
                     <textarea
                       rows={4}
+                      disabled={status === "submitting"}
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-transparent resize-none"
+                      className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-transparent resize-none disabled:opacity-50"
                     />
                   </div>
 
+                  {/* Error message */}
+                  {status === "error" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20"
+                    >
+                      <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                      <p className="text-sm text-red-300">{errorMsg}</p>
+                    </motion.div>
+                  )}
+
                   <motion.button
                     type="submit"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="btn-neon-solid w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-sm"
+                    disabled={status === "submitting"}
+                    whileHover={status !== "submitting" ? { scale: 1.02 } : {}}
+                    whileTap={status !== "submitting" ? { scale: 0.98 } : {}}
+                    className="btn-neon-solid w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-sm disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    <Send className="w-4 h-4" />
-                    {t.form.submit}
+                    {status === "submitting" ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        {lang === "en" ? "Sending…" : "發送中…"}
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        {t.form.submit}
+                      </>
+                    )}
                   </motion.button>
                 </form>
               )}
@@ -177,9 +233,9 @@ export default function Contact({ lang }: Props) {
               </h3>
               {[
                 { label: "WhatsApp", value: "+852 XXXX XXXX" },
-                { label: "Email", value: "hello@londeoaccess.com.hk" },
+                { label: "Email",    value: "hello@londeoaccess.com.hk" },
                 { label: lang === "en" ? "Website" : "網站", value: "londeoaccess.com.hk" },
-                { label: lang === "en" ? "Office" : "辦公室", value: lang === "en" ? "Hong Kong SAR" : "香港特別行政區" },
+                { label: lang === "en" ? "Office"  : "辦公室", value: lang === "en" ? "Hong Kong SAR" : "香港特別行政區" },
               ].map((item, i) => (
                 <div key={i} className="flex items-center justify-between">
                   <span className="text-xs text-white/30">{item.label}</span>
