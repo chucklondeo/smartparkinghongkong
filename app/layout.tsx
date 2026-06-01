@@ -15,13 +15,11 @@ export const metadata: Metadata = {
   keywords:
     "smart parking Hong Kong, Octopus parking, FPS parking, LPR camera, parking management software, 智慧停車, 八達通停車, 轉數快停車場, 停車場管理系統, londeoaccess",
   metadataBase: new URL("https://www.londeoaccess.com.hk"),
-  alternates: {
-    canonical: "https://www.londeoaccess.com.hk",
-  },
+  alternates: { canonical: "https://www.londeoaccess.com.hk" },
   openGraph: {
     title: "Londeo Smart Parking | Smart Parking Platform Built for Hong Kong",
     description:
-      "Integrating Octopus 八達通, FPS 轉數快, credit cards, LPR cameras, barriers and cloud management — all in one platform. Serving Hong Kong property owners and operators.",
+      "Integrating Octopus 八達通, FPS 轉數快, credit cards, LPR cameras, barriers and cloud management — all in one platform.",
     url: "https://www.londeoaccess.com.hk",
     siteName: "Londeo Smart Parking",
     locale: "en_HK",
@@ -30,22 +28,22 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Londeo Smart Parking | Hong Kong Smart Parking Platform",
-    description:
-      "Octopus, FPS, LPR, cloud management — one platform for Hong Kong car parks.",
+    description: "Octopus, FPS, LPR, cloud management — one platform for Hong Kong car parks.",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        {/* Preconnect to speed up external resources */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://gsfwnzuvnzmfczyzefrd.supabase.co" />
+        <link rel="dns-prefetch" href="https://gsfwnzuvnzmfczyzefrd.supabase.co" />
+      </head>
       <body className={`${inter.variable} font-sans bg-dark-900 text-white antialiased`}>
         {children}
       </body>
