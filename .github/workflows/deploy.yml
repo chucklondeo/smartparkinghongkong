@@ -6,6 +6,10 @@ on:
       - main
   workflow_dispatch:
 
+# Allow workflow to push to the deploy branch
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -30,20 +34,17 @@ jobs:
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
         run: npm run build
 
-      - name: Install lftp
-        run: sudo apt-get install -y lftp
-
-      - name: Deploy to Hostinger via lftp
-        env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USER: ${{ secrets.FTP_USERNAME }}
-          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+      # Push the built out/ folder to the 'deploy' branch
+      # Hostinger will pull from this branch automatically
+      - name: Push built files to deploy branch
         run: |
-          lftp -c "
-          set ssl:verify-certificate false;
-          set ftp:ssl-auth TLS;
-          set ftp:ssl-force true;
-          open ftp://$FTP_USER:$FTP_PASS@$FTP_SERVER;
-          mirror --reverse --delete --verbose out/ /public_html/;
-          bye
-          "
+          cd out
+          git init
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "Deploy: $(date +'%Y-%m-%d %H:%M:%S')"
+          git push --force \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git \
+            HEAD:deploy
+          echo "✅ Built files pushed to deploy branch"
