@@ -1,0 +1,51 @@
+name: Build & Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main          # Auto-deploy every time you push to main
+  workflow_dispatch:  # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Build static export
+      # Supabase keys are injected from GitHub Secrets (never stored in code)
+      - name: Build Next.js static export
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+        run: npm run build
+
+      # 5. Deploy out/ to Hostinger via FTP
+      - name: Deploy to Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./out/          # Upload everything in out/
+          server-dir: /public_html/  # Hostinger root directory
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+          dangerous-clean-slate: false  # Don't delete existing files not in out/
