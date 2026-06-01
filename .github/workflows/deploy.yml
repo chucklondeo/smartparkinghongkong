@@ -30,17 +30,16 @@ jobs:
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
         run: npm run build
 
-      # Deploy via SFTP (port 22) — more reliable than FTP port 21
-      - name: Deploy to Hostinger via SFTP
+      - name: Deploy to Hostinger via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: sftp
-          port: 22
+          protocol: ftps
+          port: 21
           local-dir: ./out/
-          server-dir: /home/u275856596/domains/londeoaccess.com.hk/public_html/
+          server-dir: /public_html/
           exclude: |
             **/.git*
             **/.git*/**
