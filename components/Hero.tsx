@@ -36,7 +36,7 @@ export default function Hero({ lang }: Props) {
         x1: Math.random() * canvas.width, y1: Math.random() * canvas.height,
         x2: Math.random() * canvas.width, y2: Math.random() * canvas.height,
         progress: Math.random(), speed: 0.002 + Math.random() * 0.003,
-        color: Math.random() > 0.5 ? "#00D4FF" : "#7B61FF",
+        color: Math.random() > 0.5 ? "#F59E0B" : "#DC2626",
       });
     }
     for (let i = 0; i < particleCount; i++) {
@@ -81,7 +81,7 @@ export default function Hero({ lang }: Props) {
           p.x = Math.random() * canvas.width; p.y = Math.random() * canvas.height; p.life = 0;
         }
         const alpha = Math.sin((p.life / p.maxLife) * Math.PI) * 0.6;
-        ctx.fillStyle = `rgba(192,216,255,${alpha})`; ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = `rgba(245,200,100,${alpha})`; ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2); ctx.fill();
       });
       raf = requestAnimationFrame(draw);
     };
@@ -175,20 +175,20 @@ export default function Hero({ lang }: Props) {
                 <div className="absolute bottom-0 left-0 right-0 h-2/3">
                   <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-0.5 h-full bg-gradient-to-t from-white/20 to-transparent" />
                 </div>
-                <motion.div className="absolute inset-x-0 h-0.5 bg-neon-blue/80" animate={{ top: ["-2px", "100%"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }} />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-neon-blue rounded px-4 py-1.5">
-                  <span className="font-mono text-sm font-bold text-neon-blue tracking-widest">RK 2024</span>
+                <motion.div className="absolute inset-x-0 h-0.5 bg-gold-400/80" animate={{ top: ["-2px", "100%"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-gold-400 rounded px-4 py-1.5">
+                  <span className="font-mono text-sm font-bold text-gold-400 tracking-widest">RK 2024</span>
                 </div>
-                <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-neon-blue/60" />
-                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-neon-blue/60" />
-                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-neon-blue/60" />
-                <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-neon-blue/60" />
+                <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-gold-400/60" />
+                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-gold-400/60" />
+                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-gold-400/60" />
+                <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-gold-400/60" />
               </div>
               <div className="mt-3 flex items-center gap-2">
                 <div className="flex-1 h-1.5 bg-dark-700 rounded-full overflow-hidden">
-                  <div className="h-full bg-neon-blue rounded-full" style={{ width: "99.5%" }} />
+                  <div className="h-full bg-neon-blue rounded-full" style={{ width: "99.5%", background: "#F59E0B" }} />
                 </div>
-                <span className="text-xs text-neon-blue font-mono">99.5%</span>
+                <span className="text-xs text-gold-400 font-mono">99.5%</span>
               </div>
               <p className="text-xs text-white/30 mt-1">Recognition accuracy</p>
             </div>

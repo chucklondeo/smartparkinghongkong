@@ -2,24 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * 配色主題 — 八字喜用神
+ * 日主甲木旺 · 喜用神：金（首）、火（輔）
+ * 九運（2024-2043）離火當令
+ *
+ * 主色: 金  #D97706 / #F59E0B  → 金神，財富
+ * 輔色: 火紅 #DC2626 / #EA580C → 火神，九運
+ * 底色: 暖黑 #080604           → 中性承托
+ */
+
 :root {
-  --neon-blue: #00D4FF;
-  --neon-cyan: #00F5FF;
-  --neon-silver: #C0D8FF;
-  --neon-purple: #7B61FF;
-  --dark-900: #020408;
-  --dark-800: #060C14;
-  --dark-700: #0A1628;
-  --dark-600: #0E1E38;
+  --gold-primary: #D97706;
+  --gold-bright:  #F59E0B;
+  --gold-light:   #FBBF24;
+  --fire-red:     #DC2626;
+  --fire-orange:  #EA580C;
+  --silver:       #E2E8F0;
+  --dark-900: #080604;
+  --dark-800: #100E09;
+  --dark-700: #1A1609;
+  --dark-600: #231E0F;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
   background-color: var(--dark-900);
@@ -30,152 +37,119 @@ body {
   overflow-x: hidden;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--dark-900);
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 212, 255, 0.3);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 212, 255, 0.6);
-}
+/* Scrollbar — gold tint */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--dark-900); }
+::-webkit-scrollbar-thumb { background: rgba(217,119,6,0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(245,158,11,0.7); }
 
 /* Selection */
-::selection {
-  background: rgba(0, 212, 255, 0.3);
-  color: #ffffff;
-}
+::selection { background: rgba(217,119,6,0.35); color: #ffffff; }
 
-/* Glass morphism utility */
+/* ─── Glass morphism ─────────────────────────────────────────────────────── */
 .glass {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255,255,255,0.04);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255,255,255,0.07);
 }
-
 .glass-strong {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255,255,255,0.07);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255,255,255,0.12);
 }
-
+/* Gold-tinted glass card */
 .glass-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  background: linear-gradient(135deg, rgba(217,119,6,0.06) 0%, rgba(255,255,255,0.02) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 212, 255, 0.15);
+  border: 1px solid rgba(217,119,6,0.18);
 }
 
-/* Neon text */
-.text-neon {
-  color: var(--neon-blue);
-  text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+/* ─── Text ───────────────────────────────────────────────────────────────── */
+.text-gold {
+  color: var(--gold-bright);
+  text-shadow: 0 0 20px rgba(245,158,11,0.5);
 }
 
+/* Gold → Fire gradient (headline accent) */
 .text-gradient {
-  background: linear-gradient(135deg, #00D4FF 0%, #C0D8FF 50%, #7B61FF 100%);
+  background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 45%, #DC2626 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* White → warm silver (secondary headline) */
 .text-gradient-silver {
-  background: linear-gradient(135deg, #ffffff 0%, #C0D8FF 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #E2E8F0 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Grid background */
+/* ─── Grid background — gold tint ───────────────────────────────────────── */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(217,119,6,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(217,119,6,0.06) 1px, transparent 1px);
   background-size: 50px 50px;
 }
 
-/* Glow effects */
-.glow-blue {
-  box-shadow: 0 0 30px rgba(0, 212, 255, 0.3), 0 0 60px rgba(0, 212, 255, 0.1);
-}
+/* ─── Glow effects — gold ────────────────────────────────────────────────── */
+.glow-blue    { box-shadow: 0 0 30px rgba(217,119,6,0.35), 0 0 60px rgba(217,119,6,0.12); }
+.glow-blue-sm { box-shadow: 0 0 16px rgba(217,119,6,0.25); }
+.glow-gold    { box-shadow: 0 0 30px rgba(245,158,11,0.45), 0 0 70px rgba(220,38,38,0.15); }
+.glow-fire    { box-shadow: 0 0 25px rgba(220,38,38,0.4), 0 0 50px rgba(220,38,38,0.12); }
 
-.glow-blue-sm {
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
-}
-
-/* Animated gradient border */
-.border-glow {
-  position: relative;
-}
+/* ─── Animated gradient border — gold/fire ───────────────────────────────── */
+.border-glow { position: relative; }
 .border-glow::before {
   content: '';
   position: absolute;
   inset: -1px;
-  background: linear-gradient(135deg, rgba(0,212,255,0.5), rgba(123,97,255,0.5), rgba(0,212,255,0.5));
+  background: linear-gradient(135deg, rgba(245,158,11,0.6), rgba(220,38,38,0.5), rgba(245,158,11,0.6));
   border-radius: inherit;
   z-index: -1;
   animation: borderRotate 4s linear infinite;
 }
 @keyframes borderRotate {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* Particle effect placeholder */
-.particle-bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-
-/* Number counter animation */
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Shimmer animation */
+/* ─── Shimmer ────────────────────────────────────────────────────────────── */
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
 }
-
 .shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0.05) 50%,
-    rgba(255,255,255,0) 100%
-  );
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(245,158,11,0.06) 50%, rgba(255,255,255,0) 100%);
   background-size: 200% 100%;
   animation: shimmer 3s infinite;
 }
 
-/* Section padding */
-.section-padding {
-  padding: 6rem 0;
+/* ─── Particle / dots bg ─────────────────────────────────────────────────── */
+.particle-bg { position: absolute; inset: 0; overflow: hidden; }
+.dots-bg {
+  background-image: radial-gradient(circle, rgba(217,119,6,0.18) 1px, transparent 1px);
+  background-size: 30px 30px;
 }
 
-@media (max-width: 768px) {
-  .section-padding {
-    padding: 4rem 0;
-  }
-}
+/* ─── Section padding ────────────────────────────────────────────────────── */
+.section-padding { padding: 6rem 0; }
+@media (max-width: 768px) { .section-padding { padding: 4rem 0; } }
 
-/* Neon button */
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+
+/* Outlined gold button (secondary CTA) */
 .btn-neon {
   position: relative;
-  background: linear-gradient(135deg, rgba(0,212,255,0.15) 0%, rgba(123,97,255,0.15) 100%);
-  border: 1px solid rgba(0,212,255,0.4);
-  color: #00D4FF;
+  background: linear-gradient(135deg, rgba(217,119,6,0.12) 0%, rgba(220,38,38,0.08) 100%);
+  border: 1px solid rgba(245,158,11,0.45);
+  color: #F59E0B;
   transition: all 0.3s ease;
   overflow: hidden;
 }
@@ -183,51 +157,34 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(123,97,255,0.2) 100%);
+  background: linear-gradient(135deg, rgba(245,158,11,0.18) 0%, rgba(220,38,38,0.14) 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-.btn-neon:hover::before {
-  opacity: 1;
-}
+.btn-neon:hover::before { opacity: 1; }
 .btn-neon:hover {
-  box-shadow: 0 0 30px rgba(0,212,255,0.4), 0 0 60px rgba(0,212,255,0.1);
-  border-color: rgba(0,212,255,0.8);
+  box-shadow: 0 0 28px rgba(245,158,11,0.45), 0 0 55px rgba(245,158,11,0.12);
+  border-color: rgba(245,158,11,0.85);
 }
 
-/* Solid neon button */
+/* Solid gold CTA button (primary) */
 .btn-neon-solid {
-  background: linear-gradient(135deg, #00D4FF 0%, #0099CC 100%);
-  color: #020408;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 60%, #DC2626 100%);
+  color: #080604;
   font-weight: 700;
   transition: all 0.3s ease;
 }
 .btn-neon-solid:hover {
-  box-shadow: 0 0 30px rgba(0,212,255,0.5), 0 0 60px rgba(0,212,255,0.2);
+  box-shadow: 0 0 30px rgba(245,158,11,0.55), 0 0 65px rgba(220,38,38,0.18);
   transform: translateY(-2px);
+  filter: brightness(1.08);
 }
 
-/* Scan line animation */
-@keyframes scanLine {
-  0% { top: -2px; }
-  100% { top: 100%; }
-}
-
-/* Floating dots background */
-.dots-bg {
-  background-image: radial-gradient(circle, rgba(0,212,255,0.15) 1px, transparent 1px);
-  background-size: 30px 30px;
-}
-
-/* ─── Hero CSS entrance animations ───────────────────────────────────────────
-   CSS keyframes so hero content is visible immediately in pre-rendered HTML.
-   Avoids framer-motion opacity:0 flash which tanks LCP on static exports.
-*/
+/* ─── Hero CSS entrance animations ──────────────────────────────────────── */
 @keyframes heroFadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
 .hero-fade-1 { animation: heroFadeUp 0.6s ease-out 0.05s both; }
 .hero-fade-2 { animation: heroFadeUp 0.7s ease-out 0.15s both; }
 .hero-fade-3 { animation: heroFadeUp 0.6s ease-out 0.28s both; }

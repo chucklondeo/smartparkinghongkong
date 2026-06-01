@@ -21,14 +21,14 @@ export default function LondeoLogo({ height = 44, variant = "light" }: Props) {
   const H = 130;
   const scale = height / H;
 
-  // Color tokens
-  const navy      = variant === "light" ? "#1B2A5E" : "#1B2A5E";
+  // Color tokens — 八字配色：金神主色、火神輔色
+  const navy      = variant === "light" ? "#1A1609" : "#1B2A5E";
   const wordmark  = variant === "light" ? "#FFFFFF"  : "#1B2A5E";
-  const cyan      = "#00C8F0";
-  const orange    = "#E05A1B";
-  const silver    = "#B8C8D8";
-  const skyGray   = variant === "light" ? "rgba(200,215,235,0.55)" : "rgba(80,100,140,0.5)";
-  const boxBorder = variant === "light" ? "rgba(0,200,240,0.35)"   : "rgba(27,42,94,0.5)";
+  const cyan      = "#F59E0B";   // Gold (Metal 金神) replaces blue
+  const orange    = "#DC2626";   // Fire Red (火神) accent
+  const silver    = "#D97706";   // Deep gold for barrier arm
+  const skyGray   = variant === "light" ? "rgba(245,185,80,0.45)" : "rgba(80,100,140,0.5)";
+  const boxBorder = variant === "light" ? "rgba(245,158,11,0.45)" : "rgba(27,42,94,0.5)";
 
   return (
     <svg
