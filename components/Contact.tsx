@@ -20,6 +20,23 @@ export default function Contact({ lang }: Props) {
     name: "", company: "", email: "", whatsapp: "", projectType: "", message: "",
   });
 
+  const openEmailFallback = () => {
+    const subject = encodeURIComponent(`Londeo enquiry from ${form.company || form.name}`);
+    const body = encodeURIComponent(
+      [
+        `Name: ${form.name}`,
+        `Company: ${form.company}`,
+        `Email: ${form.email}`,
+        `WhatsApp: ${form.whatsapp || "-"}`,
+        `Project type: ${form.projectType || "-"}`,
+        "",
+        form.message || "-",
+      ].join("\n")
+    );
+
+    window.location.href = `mailto:hello@londeoaccess.com.hk?subject=${subject}&body=${body}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("submitting");
@@ -27,6 +44,12 @@ export default function Contact({ lang }: Props) {
 
     try {
       const supabase = createClient();
+      if (!supabase) {
+        openEmailFallback();
+        setStatus("success");
+        return;
+      }
+
       const { error } = await supabase.from("contact_submissions").insert({
         name:         form.name,
         company:      form.company,
