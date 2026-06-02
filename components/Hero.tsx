@@ -53,7 +53,7 @@ export default function Hero({ lang }: Props) {
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = "rgba(0,212,255,0.04)";
+      ctx.strokeStyle = "rgba(217,119,6,0.04)";
       ctx.lineWidth = 1;
       const gridSize = 60;
       for (let x = 0; x < canvas.width; x += gridSize) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }

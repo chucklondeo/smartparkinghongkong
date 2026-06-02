@@ -37,6 +37,18 @@ body {
   overflow-x: hidden;
 }
 
+/*
+ * Deployment safety net:
+ * Hostinger/CDN can briefly serve HTML from one build and JS chunks from
+ * another. Framer Motion SSR markup may then keep content at opacity:0,
+ * which looks like a blank page. Force SSR-hidden content visible so the
+ * marketing page remains readable even if hydration is delayed or fails.
+ */
+body [style*="opacity:0"],
+body [style*="opacity: 0"] {
+  opacity: 1 !important;
+}
+
 /* Scrollbar — gold tint */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--dark-900); }
