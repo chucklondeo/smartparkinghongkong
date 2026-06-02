@@ -64,12 +64,8 @@ export default function Contact({ lang }: Props) {
       setStatus("success");
     } catch (err: unknown) {
       console.error("Contact form error:", err);
-      setErrorMsg(
-        lang === "en"
-          ? "Something went wrong. Please try again or email us directly."
-          : "提交失敗，請稍後再試或直接電郵聯絡我們。"
-      );
-      setStatus("error");
+openEmailFallback();
+setStatus("success");
     }
   };
 
