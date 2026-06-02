@@ -197,10 +197,10 @@ export default function Hero({ lang }: Props) {
               <p className="text-xs text-white/30 mb-3 font-mono uppercase tracking-widest">Payment Methods</p>
               <div className="space-y-2">
                 {[
-                  { name: "Octopus 八達通", pct: 42, color: "#00D4FF" },
-                  { name: "FPS 轉數快", pct: 28, color: "#7B61FF" },
-                  { name: "Visa / MC", pct: 18, color: "#C0D8FF" },
-                  { name: "Apple / Google Pay", pct: 12, color: "#00F5FF" },
+                  { name: "Octopus 八達通", pct: 42, color: "#F59E0B" },
+                  { name: "FPS 轉數快", pct: 28, color: "#DC2626" },
+                  { name: "Visa / MC", pct: 18, color: "#E2E8F0" },
+                  { name: "Apple / Google Pay", pct: 12, color: "#FBBF24" },
                 ].map((item, i) => (
                   <div key={i}>
                     <div className="flex justify-between text-xs mb-1">

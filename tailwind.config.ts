@@ -37,7 +37,9 @@ const config: Config = {
         },
         // 保留部分 neon 用於科技感細節（降低比重）
         neon: {
-          blue:   "#00D4FF",
+          blue:   "#F59E0B",
+          purple: "#DC2626",
+          cyan:   "#FBBF24",
           silver: "#E2E8F0",  // upgraded to warmer silver
           gold:   "#F5C842",  // neon gold highlight
         },

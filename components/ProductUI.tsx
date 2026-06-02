@@ -124,10 +124,10 @@ export default function ProductUI({ lang }: Props) {
                 <h4 className="text-sm font-semibold text-white/70 mb-4">{t.paymentBreakdown}</h4>
                 <div className="space-y-3">
                   {[
-                    { name: "Octopus", pct: 42, color: "#00D4FF" },
-                    { name: "FPS", pct: 28, color: "#7B61FF" },
-                    { name: "Card", pct: 18, color: "#C0D8FF" },
-                    { name: "Mobile", pct: 12, color: "#00F5FF" },
+                    { name: "Octopus", pct: 42, color: "#F59E0B" },
+                    { name: "FPS", pct: 28, color: "#DC2626" },
+                    { name: "Card", pct: 18, color: "#E2E8F0" },
+                    { name: "Mobile", pct: 12, color: "#FBBF24" },
                   ].map((p, i) => (
                     <div key={i}>
                       <div className="flex justify-between text-xs text-white/50 mb-1">
