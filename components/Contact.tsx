@@ -1,66 +1,87 @@
 "use client";
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { Send, CheckCircle, ArrowRight, Loader2, AlertCircle } from "lucide-react";
+import { Send, CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 import type { Lang } from "@/lib/i18n";
 import { translations } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/client";
 
 interface Props { lang: Lang }
 
-type Status = "idle" | "submitting" | "success" | "error";
+type Status = "idle" | "submitting" | "success";
+
+type ContactSubmission = {
+  name: string;
+  company: string;
+  email: string;
+  whatsapp: string | null;
+  project_type: string | null;
+  message: string | null;
+  lang: Lang;
+};
+
+const SALES_EMAIL = "sales@londeoaccess.com.hk";
 
 export default function Contact({ lang }: Props) {
   const t = translations[lang].contact;
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const [status, setStatus] = useState<Status>("idle");
-  const [errorMsg, setErrorMsg] = useState("");
   const [form, setForm] = useState({
     name: "", company: "", email: "", whatsapp: "", projectType: "", message: "",
   });
 
-  const openEmailFallback = () => {
-    const subject = encodeURIComponent(`Londeo enquiry from ${form.company || form.name}`);
+  const getSubmission = (): ContactSubmission => ({
+    name: form.name.trim(),
+    company: form.company.trim(),
+    email: form.email.trim(),
+    whatsapp: form.whatsapp.trim() || null,
+    project_type: form.projectType || null,
+    message: form.message.trim() || null,
+    lang,
+  });
+
+  const openEmailFallback = (submission = getSubmission()) => {
+    const subject = encodeURIComponent(`Londeo enquiry from ${submission.company || submission.name}`);
     const body = encodeURIComponent(
       [
-        `Name: ${form.name}`,
-        `Company: ${form.company}`,
-        `Email: ${form.email}`,
-        `WhatsApp: ${form.whatsapp || "-"}`,
-        `Project type: ${form.projectType || "-"}`,
+        `Name: ${submission.name}`,
+        `Company: ${submission.company}`,
+        `Email: ${submission.email}`,
+        `WhatsApp: ${submission.whatsapp || "-"}`,
+        `Project type: ${submission.project_type || "-"}`,
         "",
-        form.message || "-",
+        submission.message || "-",
       ].join("\n")
     );
 
-    window.location.href = `mailto:hello@londeoaccess.com.hk?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${SALES_EMAIL}?subject=${subject}&body=${body}`;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("submitting");
-    setErrorMsg("");
 
     try {
+      const submission = getSubmission();
       const supabase = createClient();
       if (!supabase) {
-        openEmailFallback();
+        openEmailFallback(submission);
         setStatus("success");
         return;
       }
 
-      const { error } = await supabase.from("contact_submissions").insert({
-        name:         form.name,
-        company:      form.company,
-        email:        form.email,
-        whatsapp:     form.whatsapp || null,
-        project_type: form.projectType || null,
-        message:      form.message || null,
-        lang,
+      const { error: emailError } = await supabase.functions.invoke("send-contact-email", {
+        body: submission,
       });
 
-      if (error) throw error;
+      if (emailError) throw emailError;
+
+      const { error: insertError } = await supabase.from("contact_submissions").insert(submission);
+      if (insertError) {
+        console.warn("Contact form database insert failed:", insertError);
+      }
+
       setStatus("success");
     } catch (err: unknown) {
       console.error("Contact form error:", err);
@@ -189,18 +210,6 @@ setStatus("success");
                     />
                   </div>
 
-                  {/* Error message */}
-                  {status === "error" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20"
-                    >
-                      <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
-                      <p className="text-sm text-red-300">{errorMsg}</p>
-                    </motion.div>
-                  )}
-
                   <motion.button
                     type="submit"
                     disabled={status === "submitting"}
@@ -252,7 +261,7 @@ setStatus("success");
               </h3>
               {[
                 { label: "WhatsApp", value: "+852 XXXX XXXX" },
-                { label: "Email",    value: "hello@londeoaccess.com.hk" },
+                { label: "Email",    value: SALES_EMAIL },
                 { label: lang === "en" ? "Website" : "網站", value: "londeoaccess.com.hk" },
                 { label: lang === "en" ? "Office"  : "辦公室", value: lang === "en" ? "Hong Kong SAR" : "香港特別行政區" },
               ].map((item, i) => (
