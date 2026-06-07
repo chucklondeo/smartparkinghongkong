@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Hostinger is configured as a Next.js Node app on the main branch.
-  // Keep this as a standard Next.js build so `next build` + `next start` works there.
+  // Hostinger's current deploy pipeline expects a build output directory.
+  // Static export creates `out/`, matching the configured output directory.
+  output: "export",
+
+  // Disable image optimisation because static export cannot use the Next.js image server.
   images: {
     unoptimized: true,
   },
