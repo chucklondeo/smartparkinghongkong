@@ -21,6 +21,9 @@ type ContactSubmission = {
 };
 
 const SALES_EMAIL = "sales@londeoaccess.com.hk";
+const WHATSAPP_NUMBER = "+852 9041 6433";
+const OFFICE_ADDRESS = "Flexi Space 12, Level 8, No. 5, Lok Yip Road, Fanling, North Territory, 999077, Hong Kong.";
+const FORM_SUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${SALES_EMAIL}`;
 
 export default function Contact({ lang }: Props) {
   const t = translations[lang].contact;
@@ -58,15 +61,51 @@ export default function Contact({ lang }: Props) {
     window.location.href = `mailto:${SALES_EMAIL}?subject=${subject}&body=${body}`;
   };
 
+  const sendViaFormSubmit = async (submission: ContactSubmission) => {
+    const response = await fetch(FORM_SUBMIT_ENDPOINT, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: submission.name,
+        company: submission.company,
+        email: submission.email,
+        whatsapp: submission.whatsapp || "-",
+        project_type: submission.project_type || "-",
+        message: submission.message || "-",
+        _subject: `New Londeo enquiry from ${submission.company || submission.name}`,
+        _template: "table",
+        _captcha: "false",
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`FormSubmit failed with status ${response.status}`);
+    }
+  };
+
+  const saveSubmission = async (submission: ContactSubmission) => {
+    const supabase = createClient();
+    if (!supabase) return;
+
+    const { error } = await supabase.from("contact_submissions").insert(submission);
+    if (error) {
+      console.warn("Contact form database insert failed:", error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("submitting");
 
+    const submission = getSubmission();
+    const supabase = createClient();
+
     try {
-      const submission = getSubmission();
-      const supabase = createClient();
       if (!supabase) {
-        openEmailFallback(submission);
+        await sendViaFormSubmit(submission);
         setStatus("success");
         return;
       }
@@ -77,16 +116,20 @@ export default function Contact({ lang }: Props) {
 
       if (emailError) throw emailError;
 
-      const { error: insertError } = await supabase.from("contact_submissions").insert(submission);
-      if (insertError) {
-        console.warn("Contact form database insert failed:", insertError);
-      }
-
+      await saveSubmission(submission);
       setStatus("success");
     } catch (err: unknown) {
       console.error("Contact form error:", err);
-openEmailFallback();
-setStatus("success");
+
+      try {
+        await sendViaFormSubmit(submission);
+        await saveSubmission(submission);
+        setStatus("success");
+      } catch (fallbackErr: unknown) {
+        console.error("Contact form fallback error:", fallbackErr);
+        openEmailFallback(submission);
+        setStatus("success");
+      }
     }
   };
 
@@ -260,14 +303,14 @@ setStatus("success");
                 {lang === "en" ? "Direct Contact" : "直接聯絡"}
               </h3>
               {[
-                { label: "WhatsApp", value: "+852 XXXX XXXX" },
+                { label: "WhatsApp", value: WHATSAPP_NUMBER },
                 { label: "Email",    value: SALES_EMAIL },
                 { label: lang === "en" ? "Website" : "網站", value: "londeoaccess.com.hk" },
-                { label: lang === "en" ? "Office"  : "辦公室", value: lang === "en" ? "Hong Kong SAR" : "香港特別行政區" },
+                { label: lang === "en" ? "Office" : "Office", value: OFFICE_ADDRESS },
               ].map((item, i) => (
                 <div key={i} className="flex items-center justify-between">
                   <span className="text-xs text-white/30">{item.label}</span>
-                  <span className="text-sm text-neon-blue font-medium">{item.value}</span>
+                  <span className="max-w-[70%] text-right text-sm text-neon-blue font-medium break-words">{item.value}</span>
                 </div>
               ))}
             </div>
