@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Static export — works on any hosting (Hostinger Shared, VPS, CDN, etc.)
-  // Supabase browser client works fine in static mode.
-  output: "export",
-
-  // Disable image optimisation (requires a Node.js server; not available in static mode)
+  // Hostinger is configured as a Next.js Node app on the main branch.
+  // Keep this as a standard Next.js build so `next build` + `next start` works there.
   images: {
     unoptimized: true,
   },
