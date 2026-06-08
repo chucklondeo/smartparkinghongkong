@@ -23,7 +23,8 @@ type ContactSubmission = {
 const SALES_EMAIL = "sales@londeoaccess.com.hk";
 const WHATSAPP_NUMBER = "+852 9041 6433";
 const OFFICE_ADDRESS = "Flexi Space 12, Level 8, No. 5, Lok Yip Road, Fanling, North Territory, 999077, Hong Kong.";
-const FORM_SUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${SALES_EMAIL}`;
+const FORM_SUBMIT_ENDPOINT = `https://formsubmit.co/${SALES_EMAIL}`;
+const FORM_SUBMIT_AJAX_ENDPOINT = `https://formsubmit.co/ajax/${SALES_EMAIL}`;
 
 export default function Contact({ lang }: Props) {
   const t = translations[lang].contact;
@@ -62,7 +63,7 @@ export default function Contact({ lang }: Props) {
   };
 
   const sendViaFormSubmit = async (submission: ContactSubmission) => {
-    const response = await fetch(FORM_SUBMIT_ENDPOINT, {
+    const response = await fetch(FORM_SUBMIT_AJAX_ENDPOINT, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -78,6 +79,7 @@ export default function Contact({ lang }: Props) {
         _subject: `New Londeo enquiry from ${submission.company || submission.name}`,
         _template: "table",
         _captcha: "false",
+        _url: "https://www.londeoaccess.com.hk/#contact",
       }),
     });
 
@@ -96,8 +98,9 @@ export default function Contact({ lang }: Props) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formElement = e.currentTarget;
     setStatus("submitting");
 
     const submission = getSubmission();
@@ -127,8 +130,7 @@ export default function Contact({ lang }: Props) {
         setStatus("success");
       } catch (fallbackErr: unknown) {
         console.error("Contact form fallback error:", fallbackErr);
-        openEmailFallback(submission);
-        setStatus("success");
+        formElement.submit();
       }
     }
   };
@@ -179,7 +181,17 @@ export default function Contact({ lang }: Props) {
                   <p className="text-white/50">{t.form.success}</p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form
+                  action={FORM_SUBMIT_ENDPOINT}
+                  method="POST"
+                  onSubmit={handleSubmit}
+                  className="space-y-5"
+                >
+                  <input type="hidden" name="_subject" value={`New Londeo enquiry from ${form.company || form.name || "website"}`} />
+                  <input type="hidden" name="_template" value="table" />
+                  <input type="hidden" name="_captcha" value="false" />
+                  <input type="hidden" name="_url" value="https://www.londeoaccess.com.hk/#contact" />
+                  <input type="hidden" name="project_type" value={form.projectType} />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     {[
                       { key: "name",    label: t.form.name,    type: "text" },
@@ -189,8 +201,8 @@ export default function Contact({ lang }: Props) {
                         <label className="block text-xs text-white/40 mb-2 uppercase tracking-wider">{label}</label>
                         <input
                           type={type}
+                          name={key}
                           required
-                          disabled={status === "submitting"}
                           value={form[key as keyof typeof form]}
                           onChange={(e) => setForm({ ...form, [key]: e.target.value })}
                           className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none focus:ring-0 transition-colors bg-transparent disabled:opacity-50"
@@ -204,8 +216,8 @@ export default function Contact({ lang }: Props) {
                       <label className="block text-xs text-white/40 mb-2 uppercase tracking-wider">{t.form.email}</label>
                       <input
                         type="email"
+                        name="email"
                         required
-                        disabled={status === "submitting"}
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
                         className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-transparent disabled:opacity-50"
@@ -215,7 +227,7 @@ export default function Contact({ lang }: Props) {
                       <label className="block text-xs text-white/40 mb-2 uppercase tracking-wider">{t.form.whatsapp}</label>
                       <input
                         type="tel"
-                        disabled={status === "submitting"}
+                        name="whatsapp"
                         value={form.whatsapp}
                         onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
                         placeholder="+852"
@@ -228,7 +240,6 @@ export default function Contact({ lang }: Props) {
                     <label className="block text-xs text-white/40 mb-2 uppercase tracking-wider">{t.form.projectType}</label>
                     <select
                       required
-                      disabled={status === "submitting"}
                       value={form.projectType}
                       onChange={(e) => setForm({ ...form, projectType: e.target.value })}
                       className="w-full glass px-4 py-3 rounded-xl text-sm text-white border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-dark-800 appearance-none disabled:opacity-50"
@@ -245,8 +256,8 @@ export default function Contact({ lang }: Props) {
                   <div>
                     <label className="block text-xs text-white/40 mb-2 uppercase tracking-wider">{t.form.message}</label>
                     <textarea
+                      name="message"
                       rows={4}
-                      disabled={status === "submitting"}
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                       className="w-full glass px-4 py-3 rounded-xl text-sm text-white placeholder-white/20 border border-white/10 focus:border-neon-blue/50 focus:outline-none transition-colors bg-transparent resize-none disabled:opacity-50"
