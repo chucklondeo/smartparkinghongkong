@@ -4,27 +4,15 @@ import { motion, useInView } from "framer-motion";
 import { Send, CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 import type { Lang } from "@/lib/i18n";
 import { translations } from "@/lib/i18n";
-import { createClient } from "@/lib/supabase/client";
 
 interface Props { lang: Lang }
 
 type Status = "idle" | "submitting" | "success";
 
-type ContactSubmission = {
-  name: string;
-  company: string;
-  email: string;
-  whatsapp: string | null;
-  project_type: string | null;
-  message: string | null;
-  lang: Lang;
-};
-
 const SALES_EMAIL = "sales@londeoaccess.com.hk";
 const WHATSAPP_NUMBER = "+852 9041 6433";
 const OFFICE_ADDRESS = "Flexi Space 12, Level 8, No. 5, Lok Yip Road, Fanling, North Territory, 999077, Hong Kong.";
 const FORM_SUBMIT_ENDPOINT = `https://formsubmit.co/${SALES_EMAIL}`;
-const FORM_SUBMIT_AJAX_ENDPOINT = `https://formsubmit.co/ajax/${SALES_EMAIL}`;
 
 export default function Contact({ lang }: Props) {
   const t = translations[lang].contact;
@@ -35,104 +23,8 @@ export default function Contact({ lang }: Props) {
     name: "", company: "", email: "", whatsapp: "", projectType: "", message: "",
   });
 
-  const getSubmission = (): ContactSubmission => ({
-    name: form.name.trim(),
-    company: form.company.trim(),
-    email: form.email.trim(),
-    whatsapp: form.whatsapp.trim() || null,
-    project_type: form.projectType || null,
-    message: form.message.trim() || null,
-    lang,
-  });
-
-  const openEmailFallback = (submission = getSubmission()) => {
-    const subject = encodeURIComponent(`Londeo enquiry from ${submission.company || submission.name}`);
-    const body = encodeURIComponent(
-      [
-        `Name: ${submission.name}`,
-        `Company: ${submission.company}`,
-        `Email: ${submission.email}`,
-        `WhatsApp: ${submission.whatsapp || "-"}`,
-        `Project type: ${submission.project_type || "-"}`,
-        "",
-        submission.message || "-",
-      ].join("\n")
-    );
-
-    window.location.href = `mailto:${SALES_EMAIL}?subject=${subject}&body=${body}`;
-  };
-
-  const sendViaFormSubmit = async (submission: ContactSubmission) => {
-    const response = await fetch(FORM_SUBMIT_AJAX_ENDPOINT, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: submission.name,
-        company: submission.company,
-        email: submission.email,
-        whatsapp: submission.whatsapp || "-",
-        project_type: submission.project_type || "-",
-        message: submission.message || "-",
-        _subject: `New Londeo enquiry from ${submission.company || submission.name}`,
-        _template: "table",
-        _captcha: "false",
-        _url: "https://www.londeoaccess.com.hk/#contact",
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`FormSubmit failed with status ${response.status}`);
-    }
-  };
-
-  const saveSubmission = async (submission: ContactSubmission) => {
-    const supabase = createClient();
-    if (!supabase) return;
-
-    const { error } = await supabase.from("contact_submissions").insert(submission);
-    if (error) {
-      console.warn("Contact form database insert failed:", error);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formElement = e.currentTarget;
+  const handleSubmit = () => {
     setStatus("submitting");
-
-    const submission = getSubmission();
-    const supabase = createClient();
-
-    try {
-      if (!supabase) {
-        await sendViaFormSubmit(submission);
-        setStatus("success");
-        return;
-      }
-
-      const { error: emailError } = await supabase.functions.invoke("send-contact-email", {
-        body: submission,
-      });
-
-      if (emailError) throw emailError;
-
-      await saveSubmission(submission);
-      setStatus("success");
-    } catch (err: unknown) {
-      console.error("Contact form error:", err);
-
-      try {
-        await sendViaFormSubmit(submission);
-        await saveSubmission(submission);
-        setStatus("success");
-      } catch (fallbackErr: unknown) {
-        console.error("Contact form fallback error:", fallbackErr);
-        formElement.submit();
-      }
-    }
   };
 
   return (
@@ -190,8 +82,8 @@ export default function Contact({ lang }: Props) {
                   <input type="hidden" name="_subject" value={`New Londeo enquiry from ${form.company || form.name || "website"}`} />
                   <input type="hidden" name="_template" value="table" />
                   <input type="hidden" name="_captcha" value="false" />
+                  <input type="hidden" name="_next" value="https://www.londeoaccess.com.hk/#contact" />
                   <input type="hidden" name="_url" value="https://www.londeoaccess.com.hk/#contact" />
-                  <input type="hidden" name="project_type" value={form.projectType} />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     {[
                       { key: "name",    label: t.form.name,    type: "text" },
@@ -239,6 +131,7 @@ export default function Contact({ lang }: Props) {
                   <div>
                     <label className="block text-xs text-white/40 mb-2 uppercase tracking-wider">{t.form.projectType}</label>
                     <select
+                      name="project_type"
                       required
                       value={form.projectType}
                       onChange={(e) => setForm({ ...form, projectType: e.target.value })}
