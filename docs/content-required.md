@@ -1,5 +1,9 @@
 # Content Required From Londeo
 
+**Status update (implementation pass):** the five product pages, five solution pages, and every other route in the brief's information architecture now exist and are live on the branch (`lib/content/products.ts`, `lib/content/solutions.ts`). Every gap below still applies exactly as written — the pages render a real `ContentRequired` component (`components/ContentRequired.tsx`) wherever a spec, photo, datasheet or video is missing, instead of a fabricated value. A fifth product, **Pedestrian Access Gates**, was added to match the brief's explicit five-product requirement (§十八) — its own content gaps are listed in a new §5 below, and the original §5 (case studies) is renumbered §6, §6 (certifications) is §7, §7 (company/legal) is §8, §8 (brand assets) is §9.
+
+**Resolved since the original audit:** WhatsApp number and office address are now wired into real `wa.me` / plain-text links (`lib/site-config.ts`), "North Territory" is corrected to "New Territories" everywhere, and the `sales@` vs. `hello@` email inconsistency is resolved by canonicalizing on `sales@londeoaccess.com.hk` in code (see `content-claims-review.md` for the full trail). What's still outstanding from §8 (company/legal) below is only the **exact registered legal entity name** — the site currently uses "Londeo Access" everywhere and does not assert "Londeo Smart Parking Limited" or any other specific entity name until that's confirmed.
+
 **Purpose:** Everything below is needed to build the new product, solution and case-study pages honestly — with real photos, real specs, and real proof points instead of placeholders. Checked against the current repository: **`public/` currently contains only `londeo-logo-transparent.png` and `.htaccess` — there is no existing product photography, datasheet, certificate, or case-study asset anywhere in this repo.** Everything in this list is therefore a genuine gap, not a duplication of something already on file.
 
 Until each item is supplied, the corresponding page section will render a visible **`Content required`** state rather than a fabricated placeholder that looks real. No stock/AI-generated product photos, no invented model numbers, and no invented customer logos will be used.
@@ -47,7 +51,20 @@ The original brief suggested these selling points — **each needs to be checked
 - [ ] Any payment scheme certification/approval documentation (Octopus, FPS) if claiming certified integration — see `content-claims-review.md` §2
 - [ ] Datasheet (PDF), if a physical kiosk product exists
 
-## 5. Case studies
+## 5. Product: Pedestrian Access Gates
+
+**Added in this pass** to satisfy the brief's five-product requirement (§十八) — not part of the original four-product audit, so nothing here duplicates an earlier gap:
+
+- [ ] Real product photo(s) — swing gate, flap barrier and fast-lane variants
+- [ ] Model number(s) per gate format
+- [ ] Confirm which gate formats (swing / flap / fast-lane) are actually supplied today vs. planned
+- [ ] Lane width and throughput (persons/minute) per format
+- [ ] Confirm third-party facial-recognition terminals that have actually been integrated/tested, if any (the page currently says this is "available" generically, not naming a specific tested vendor)
+- [ ] Operating temperature range, IP rating
+- [ ] Datasheet (PDF)
+- [ ] Installation or operation video, if one exists
+
+## 6. Case studies
 
 **None exist in this repository today.** For each case study to be published:
 
@@ -58,25 +75,25 @@ The original brief suggested these selling points — **each needs to be checked
 - [ ] At least one real photo of the installed site, or written permission to use a generic (clearly-labeled) illustrative image instead
 - [ ] Quote/testimonial with named contact and permission to publish, if available
 
-Until at least one real, permitted case study exists, the `/case-studies` section should say so plainly rather than showing invented examples.
+Until at least one real, permitted case study exists, `/applications` (renamed from the originally-planned `/case-studies` per the brief's §九 information architecture) says so plainly rather than showing invented examples.
 
-## 6. Certifications & compliance documents
+## 7. Certifications & compliance documents
 
-- [ ] ISO 27001 certificate (if currently held) — scope and expiry date
+- [ ] ISO 27001 certificate (if currently held) — scope and expiry date. **Resolved in code for now:** the ISO 27001 trust badge has been removed from the footer since no certificate is on file — re-add it once one exists.
 - [ ] Octopus integration certification/approval letter, if formally certified
 - [ ] FPS integration approval/registration, if formally certified
 - [ ] Any other product certifications (CE, CCC, etc.) for hardware sold under the Londeo brand
 
-## 7. Company / legal identity
+## 8. Company / legal identity
 
-- [ ] Confirmed exact registered company name (to check against "Londeo Smart Parking Limited" currently hardcoded in the footer)
-- [x] ~~Registered/business address in Hong Kong~~ — **now present** in `components/Contact.tsx` (`OFFICE_ADDRESS`): "Flexi Space 12, Level 8, No. 5, Lok Yip Road, Fanling, North Territory, 999077, Hong Kong." **Still needs one fix before publishing:** "North Territory" → "New Territories" (see `content-claims-review.md` §5). Also confirm whether this address should be reused site-wide (footer, Privacy Policy, structured data) or is specific to this one contact panel.
-- [x] ~~"North Territory" → "New Territories" correction location~~ — **found**, see above.
-- [x] ~~A real, working WhatsApp business number~~ — **now present**: `+852 9041 6433` (`components/Contact.tsx`). Still needs to become a real clickable `wa.me/85290416433`-style link with a pre-filled message — currently displayed as plain text only.
-- [ ] Business hours / support availability (to confirm or replace the "6 days a week" claim in `content-claims-review.md`)
-- [ ] Confirm `sales@londeoaccess.com.hk` vs. `hello@londeoaccess.com.hk` — both now appear in the codebase (footer/CLAUDE.md use `hello@`, the newer `Contact.tsx` and the Resend edge function use `sales@`). Pick one as the canonical public contact address, or confirm both are intentionally different (e.g. sales vs. general).
+- [ ] Confirmed exact registered company name. **Resolved in code for now:** the site no longer states "Londeo Smart Parking Limited" (which was never verified against an incorporation record) anywhere — it uses the brand name "Londeo Access" throughout instead, per the brief's explicit instruction not to guess a legal entity name. Replace with the real registered name once confirmed.
+- [x] ~~Registered/business address in Hong Kong~~ — **resolved**: `lib/site-config.ts` (`OFFICE_ADDRESS_EN`/`OFFICE_ADDRESS_ZH`) now reads "Flexi Space 12, Level 8, No. 5, Lok Yip Road, Fanling, **New Territories**, Hong Kong," used on the Contact page and in the Organization JSON-LD. The Privacy Policy page does not currently repeat the physical address (only email/WhatsApp) — add it there too if the site owner wants it public on that page as well.
+- [x] ~~"North Territory" → "New Territories" correction~~ — **done**, see above.
+- [x] ~~A real, working WhatsApp business number~~ — **resolved**: `+852 9041 6433` is now a real `wa.me/85290416433` link (`lib/whatsapp.ts`), pre-filled with page/product context, used in the header CTA, footer, Contact page and every product/solution detail page.
+- [ ] Business hours / support availability (to confirm or replace the "6 days a week" claim in `content-claims-review.md` — already softened in code to a description without a specific day count, pending a real confirmed schedule)
+- [x] ~~Confirm `sales@londeoaccess.com.hk` vs. `hello@londeoaccess.com.hk`~~ — **canonicalized on `sales@londeoaccess.com.hk`** in `lib/site-config.ts` (matches the Resend edge function's sender/reply-to). `hello@` is no longer used anywhere in the code; confirm this is the intended long-term public address.
 
-## 8. Brand assets
+## 9. Brand assets
 
 - [ ] High-resolution logo variants (current repo only has one transparent PNG: `public/londeo-logo-transparent.png`) — vector/SVG source if available, plus a social-share/Open Graph image (1200×630) for link previews
 - [ ] Any brand guideline document (colors already exist in `tailwind.config.ts` — confirm these are the approved brand colors, not just a placeholder design)
