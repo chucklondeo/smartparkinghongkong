@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { ArrowRight, Play, ChevronDown } from "lucide-react";
 import type { Lang } from "@/lib/i18n";
 import { translations } from "@/lib/i18n";
+import { localeHref } from "@/lib/site-config";
 
 interface Props { lang: Lang }
 
@@ -89,9 +91,6 @@ export default function Hero({ lang }: Props) {
     return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); document.removeEventListener("visibilitychange", handleVisibility); };
   }, []);
 
-  const scrollToContact = () => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
-  const scrollToPlatform = () => document.querySelector("#platform")?.scrollIntoView({ behavior: "smooth" });
-
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-dark-900">
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-60" aria-hidden />
@@ -118,36 +117,16 @@ export default function Hero({ lang }: Props) {
           {t.subtitle}
         </p>
 
-        {/* CTAs — keep framer-motion only for hover/tap interactions */}
-        <div className="hero-fade-4 flex flex-col sm:flex-row gap-4 mb-20">
-          <motion.button
-            onClick={scrollToContact}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="btn-neon-solid px-8 py-4 rounded-xl text-base font-bold flex items-center gap-2"
-          >
-            {t.cta1}
+        {/* CTAs */}
+        <div className="hero-fade-4 flex flex-col sm:flex-row gap-4 mb-16">
+          <Link href={localeHref(lang, "/products")} className="btn-neon-solid px-8 py-4 rounded-xl text-base font-bold flex items-center justify-center gap-2">
+            {lang === "en" ? "Explore Products" : "瀏覽產品"}
             <ArrowRight className="w-4 h-4" />
-          </motion.button>
-          <motion.button
-            onClick={scrollToPlatform}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="btn-neon px-8 py-4 rounded-xl text-base font-semibold flex items-center gap-2"
-          >
+          </Link>
+          <Link href={localeHref(lang, "/contact")} className="btn-neon px-8 py-4 rounded-xl text-base font-semibold flex items-center justify-center gap-2">
             <Play className="w-4 h-4" />
-            {t.cta2}
-          </motion.button>
-        </div>
-
-        {/* Stats */}
-        <div className="hero-fade-5 grid grid-cols-3 gap-8 sm:gap-16">
-          {[t.stat1, t.stat2, t.stat3].map((stat, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <span className="text-3xl sm:text-4xl font-black text-neon-blue">{stat.value}</span>
-              <span className="text-xs text-white/40 mt-1 text-center leading-tight">{stat.label}</span>
-            </div>
-          ))}
+            {t.cta1}
+          </Link>
         </div>
       </div>
 
@@ -160,10 +139,12 @@ export default function Hero({ lang }: Props) {
               <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
               <div className="w-3 h-3 rounded-full bg-green-500/60" />
             </div>
-            <span className="text-xs text-white/30 font-mono">Londeo Parking OS — Live Feed</span>
+            <span className="text-xs text-white/30 font-mono">
+              {lang === "en" ? "Interface concept / Demo data" : "介面概念／示範數據"}
+            </span>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 bg-neon-blue rounded-full animate-pulse" />
-              <span className="text-xs text-neon-blue">LIVE</span>
+              <span className="text-xs text-neon-blue">DEMO</span>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5">

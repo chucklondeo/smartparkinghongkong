@@ -57,8 +57,8 @@ export default function ProductUI({ lang }: Props) {
               <span className="w-2 h-2 bg-neon-blue rounded-full animate-pulse" />
               <span className="text-xs text-white/40 font-mono">app.londeoaccess.com.hk/dashboard</span>
             </div>
-            <div className="text-xs text-white/20 font-mono">
-              {new Date().toLocaleTimeString("en-HK", { hour: "2-digit", minute: "2-digit" })}
+            <div className="text-xs text-white/30 font-mono uppercase tracking-widest">
+              {lang === "en" ? "Interface concept / Demo data" : "介面概念／示範數據"}
             </div>
           </div>
 

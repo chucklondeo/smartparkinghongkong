@@ -2,11 +2,20 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { ShoppingBag, Building2, Landmark, Briefcase, LayoutDashboard, Check } from "lucide-react";
+import Link from "next/link";
+import { ShoppingBag, Building2, Landmark, Briefcase, LayoutDashboard, Check, ArrowRight } from "lucide-react";
 import type { Lang } from "@/lib/i18n";
 import { translations } from "@/lib/i18n";
+import { localeHref } from "@/lib/site-config";
 
 const icons = [ShoppingBag, Building2, Briefcase, Landmark, LayoutDashboard];
+const hrefs = [
+  "/solutions/shopping-malls",
+  "/solutions/residential-estates",
+  "/solutions/commercial-buildings",
+  "/solutions/government-public",
+  "/solutions/property-managers",
+];
 const gradients = [
   "from-neon-blue/20 to-neon-cyan/10",
   "from-neon-purple/20 to-neon-blue/10",
@@ -84,7 +93,7 @@ export default function Solutions({ lang }: Props) {
                   <p className="text-white/50 text-sm leading-relaxed mb-5">{item.desc}</p>
 
                   {/* Points */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 mb-5">
                     {item.points.map((point, j) => (
                       <div key={j} className="flex items-center gap-2">
                         <Check className={`w-3.5 h-3.5 ${iconColors[i]} flex-shrink-0`} />
@@ -92,6 +101,14 @@ export default function Solutions({ lang }: Props) {
                       </div>
                     ))}
                   </div>
+
+                  <Link
+                    href={localeHref(lang, hrefs[i])}
+                    className={`inline-flex items-center gap-1.5 text-xs font-semibold ${iconColors[i]} hover:gap-2.5 transition-all`}
+                  >
+                    {lang === "en" ? "View Solution" : "查看方案"}
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
               </motion.div>
             );
