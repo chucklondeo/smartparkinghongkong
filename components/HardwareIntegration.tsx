@@ -100,8 +100,8 @@ export default function HardwareIntegration({ lang }: Props) {
             <span className="w-2 h-2 bg-neon-blue rounded-full animate-pulse" />
             <span className="text-sm text-white/50">
               {lang === "en"
-                ? "Open API — works with all major brands. Custom integrations available on request."
-                : "開放 API——兼容所有主流品牌，可按需提供定制整合方案。"}
+                ? "Open API for integration with existing equipment. Compatibility is confirmed per project during a site assessment."
+                : "開放 API 可與現有設備整合，具體兼容性須經現場勘察後確認。"}
             </span>
           </div>
         </motion.div>

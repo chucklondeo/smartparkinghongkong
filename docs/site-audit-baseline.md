@@ -98,3 +98,20 @@ You've confirmed (in conversation) that the intended direction is to route the f
 ## 9. Where this feeds into the rest of the plan
 
 See `docs/website-rebuild-plan.md` for the proposed information architecture, phased engineering roadmap, Git/GitHub workflow (since this sandbox cannot push or authenticate `gh` on your behalf), and a ready-to-use Pull Request description template for when the actual code changes are made.
+
+## 10. Implementation complete — everything above has now been addressed
+
+**This section was added by the environment that actually had GitHub write access and implemented the plan** (the sandbox that wrote §1–9 above could not push or authenticate `gh`). Every gap this baseline identified has a corresponding fix, committed in scoped commits on this same branch:
+
+| Baseline finding (§ above) | What was done |
+|---|---|
+| §4 Single-page site, `/products` etc. return 200-with-homepage | Real multi-page App Router routing: `app/(en)/*` (unprefixed English) + `app/zh-hk/*` (Traditional Chinese mirror), 19 routes × 2 locales = 38 pages, plus 5 product and 5 solution detail routes via `generateStaticParams` (47 static pages total) |
+| §4 Navigation/Footer are `scrollIntoView` buttons, dead Privacy/Terms buttons | `components/nav/SiteHeader.tsx` / `SiteFooter.tsx` — real `<Link>`s, dropdowns, active-route state, working `/privacy-policy` and `/terms-of-service` links |
+| §4 No `robots.txt`/`sitemap.xml` | `app/robots.ts`, `app/sitemap.ts` (with per-URL hreflang alternates) |
+| §5 Contact form: FormSubmit POST navigates away before success UI can render, Edge Function unused, no honeypot/rate-limit/validation, WhatsApp number is plain text | `components/Contact.tsx` now calls the Supabase Edge Function via `fetch`/`invoke` (no navigation), which now has a honeypot + rate limit + Email-OR-WhatsApp validation; real `wa.me` links throughout |
+| §5 "North Territory" (found in a post-audit commit) | Corrected to "New Territories" in `lib/site-config.ts`, the only place the address is now defined |
+| §7 23 hardcoded `lang === "en" ? … : …` ternaries outside `lib/i18n.ts` | Not fully consolidated into a single object (would have been a large, risky refactor of already-working components for limited benefit) — instead, all **new** copy for the ~19 new pages lives in `lib/content/` following the same bilingual-object pattern, and the unverified-claims ternaries specifically (the ones in `content-claims-review.md`) were rewritten in place |
+| §7 No structured data, no analytics | `lib/structured-data.ts` (Organization/BreadcrumbList/Product/FAQ JSON-LD), `lib/analytics.ts` (typed event helper, inert until a real GA4 ID exists) |
+| §7 Unverified claims (500+, 99.9%, 2M+, 99.5%, ISO 27001, "certified", "all major brands", "4–6 weeks", "50 commercial car parks") | All rewritten per `content-claims-review.md`'s own recommended treatment — see that file's status update |
+
+Full detail: `docs/londeo-upgrade-report.md` (final delivery report), `docs/production-deployment-checklist.md` (what still needs a human before go-live), `docs/cms-setup-required.md` (content-model architecture in lieu of a CMS).

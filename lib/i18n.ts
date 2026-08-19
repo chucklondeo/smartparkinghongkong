@@ -19,10 +19,6 @@ export const translations = {
       subtitle:
         "Integrating Octopus, FPS, credit cards, mobile payments, LPR cameras, LED displays, barriers and cloud management — all in one platform.",
       cta1: "Book a Demo",
-      cta2: "Explore Platform",
-      stat1: { value: "500+", label: "Parking Lots Managed" },
-      stat2: { value: "99.9%", label: "System Uptime" },
-      stat3: { value: "2M+", label: "Transactions Monthly" },
     },
     solutions: {
       badge: "Our Solutions",
@@ -79,7 +75,7 @@ export const translations = {
         title: "Operations & Management",
         subtitle: "Complete operational control",
         items: [
-          { name: "LPR Camera Recognition", desc: "AI-powered licence plate recognition with 99.5% accuracy" },
+          { name: "LPR Camera Recognition", desc: "AI-powered licence plate recognition, tuned for Hong Kong plate formats" },
           { name: "Monthly Permit Management", desc: "Automated renewal, billing and notification for monthly tenants" },
           { name: "Transient Vehicle Charging", desc: "Flexible hourly, daily and event-based tariff configurations" },
           { name: "Black & White Lists", desc: "Instant vehicle access control with real-time list sync" },
@@ -99,7 +95,7 @@ export const translations = {
         "Londeo integrates with leading hardware brands already deployed across Hong Kong. No rip-and-replace — our software connects to your existing equipment.",
       items: [
         { name: "LPR Camera", desc: "High-speed licence plate recognition cameras, supports night vision and multi-lane capture" },
-        { name: "Barrier Gate", desc: "Boom gate controllers compatible with all major brands. Sub-second response time" },
+        { name: "Barrier Gate", desc: "24V servo boom gate controllers engineered for smooth, responsive, high-cycle operation" },
         { name: "LED Display", desc: "Full-colour guidance signs and vacancy counters, remotely managed" },
         { name: "Payment Kiosk", desc: "Self-service pay stations with multi-payment hardware integration" },
         { name: "Intercom System", desc: "IP intercom for remote operator assistance and visitor management" },
@@ -128,7 +124,7 @@ export const translations = {
         },
         {
           title: "Local Payment Requirements",
-          desc: "Hong Kong commuters expect Octopus and FPS as standard. We are one of the few platforms with deep, certified integration for both local and international payment methods.",
+          desc: "Hong Kong commuters expect Octopus and FPS as standard. Our platform architecture is designed to support Hong Kong payment integration requirements, alongside international card and mobile wallet methods.",
         },
         {
           title: "Unified Reporting for Owners",
@@ -136,7 +132,7 @@ export const translations = {
         },
         {
           title: "Regulatory Compliance",
-          desc: "From PDPO data privacy to transport department requirements, Londeo's architecture is built with Hong Kong's regulatory framework embedded by design.",
+          desc: "Our platform is designed with Hong Kong's data privacy requirements (PDPO) and transport-sector conventions in mind from the outset.",
         },
       ],
     },
@@ -164,12 +160,12 @@ export const translations = {
       desc2:
         "Our team combines deep expertise in parking technology, Hong Kong regulatory compliance and local payment infrastructure. We don't just sell software — we deliver a complete, end-to-end transformation of how your car park operates.",
       desc3:
-        "From a single-site residential estate to a portfolio of 50 commercial car parks, Londeo scales with your business and grows with Hong Kong.",
+        "Whether you manage a single residential estate or a large portfolio of commercial car parks, Londeo's architecture is designed to scale with your business.",
       values: [
-        { title: "Local Expertise", desc: "Built by a Hong Kong team that understands the market inside out" },
-        { title: "Enterprise Grade", desc: "99.9% uptime SLA with enterprise security and data sovereignty" },
+        { title: "Local Expertise", desc: "Built by a team that understands Hong Kong's parking market inside out" },
+        { title: "Enterprise-Grade Architecture", desc: "Built for high-availability operation, with enterprise security practices" },
         { title: "Full Integration", desc: "Hardware, payment, reporting — one platform, zero silos" },
-        { title: "Dedicated Support", desc: "Cantonese-speaking support team available 6 days a week" },
+        { title: "Dedicated Support", desc: "Cantonese and English-speaking local support team" },
       ],
     },
     contact: {
@@ -177,24 +173,31 @@ export const translations = {
       title: "Start Your Smart Parking",
       titleAccent: "Project in Hong Kong",
       subtitle:
-        "Tell us about your property and we will design a custom solution. Most clients are live within 4–6 weeks.",
+        "Tell us about your property and we will design a custom solution — from site assessment through to go-live.",
       form: {
         name: "Your Name",
         company: "Company / Property Name",
         email: "Email Address",
         whatsapp: "WhatsApp Number",
-        projectType: "Project Type",
-        projectTypes: [
-          "Shopping Mall",
-          "Residential Estate",
-          "Commercial Building",
-          "Government / Public",
-          "Property Management Company",
-          "Other",
+        emailOrWhatsapp: "Provide an email address or WhatsApp number",
+        enquiryType: "Enquiry Type",
+        enquiryTypes: [
+          "Book a Demo",
+          "Request a Quote",
+          "Request Site Assessment",
+          "Product Question",
+          "Support",
+          "General Enquiry",
         ],
+        product: "Product (optional)",
+        productPlaceholder: "Select a product…",
+        projectLocation: "Project Location (optional)",
+        quantity: "Quantity (optional)",
+        currentSystem: "Current System (optional)",
         message: "Tell us about your project",
         submit: "Send Enquiry",
         success: "Thank you! We'll be in touch within 1 business day.",
+        error: "Something went wrong sending your enquiry. Please try WhatsApp or email us directly below.",
       },
       info: {
         title: "Why Book a Demo?",
@@ -239,10 +242,6 @@ export const translations = {
       subtitle:
         "整合八達通、轉數快、信用卡、流動支付、車牌識別、LED 顯示屏、道閘及雲端管理——一個平台，全面覆蓋。",
       cta1: "預約示範",
-      cta2: "探索平台",
-      stat1: { value: "500+", label: "管理停車場數量" },
-      stat2: { value: "99.9%", label: "系統穩定性" },
-      stat3: { value: "200萬+", label: "每月交易次數" },
     },
     solutions: {
       badge: "解決方案",
@@ -299,7 +298,7 @@ export const translations = {
         title: "運營管理功能",
         subtitle: "全面的運營控制能力",
         items: [
-          { name: "車牌識別 LPR", desc: "AI 智能車牌識別，準確率達 99.5%" },
+          { name: "車牌識別 LPR", desc: "AI 智能車牌識別，針對香港車牌格式優化" },
           { name: "月租車管理", desc: "自動續期、扣款及通知，輕鬆管理月租用戶" },
           { name: "臨時車收費管理", desc: "靈活配置按時、按日及活動收費方案" },
           { name: "黑白名單管理", desc: "即時同步黑白名單，精確控制車輛進出" },
@@ -319,7 +318,7 @@ export const translations = {
         "Londeo 支援香港已廣泛部署的主流硬件品牌，無需全面更換設備，我們的軟件直接對接現有設備。",
       items: [
         { name: "車牌識別攝影機", desc: "高速車牌識別攝影機，支援夜視及多車道捕捉" },
-        { name: "道閘控制器", desc: "兼容所有主流品牌道閘控制器，響應時間低於一秒" },
+        { name: "道閘控制器", desc: "24V 伺服道閘控制器，運行順暢、反應靈敏，適合高頻次運作" },
         { name: "LED 顯示屏", desc: "全彩引導指示牌及車位計數器，可遠端管理" },
         { name: "自助繳費機", desc: "自助付款終端，整合多種支付硬件" },
         { name: "對講系統", desc: "IP 對講機，支援遠端協助及訪客管理" },
@@ -348,7 +347,7 @@ export const translations = {
         },
         {
           title: "本地支付需求",
-          desc: "香港市民視八達通及轉數快為標準付款方式。我們是少數具備深度認證整合本地及國際支付的平台之一。",
+          desc: "香港市民視八達通及轉數快為標準付款方式。我們的平台架構設計上可支援香港本地支付整合需求，並兼容國際信用卡及流動支付方式。",
         },
         {
           title: "業主統一報表需求",
@@ -356,7 +355,7 @@ export const translations = {
         },
         {
           title: "監管合規要求",
-          desc: "從個人資料私隱條例到運輸署要求，Londeo 的架構以香港監管框架為核心設計。",
+          desc: "我們的平台從設計之初已考慮香港《個人資料（私隱）條例》及運輸業界慣例。",
         },
       ],
     },
@@ -384,12 +383,12 @@ export const translations = {
       desc2:
         "我們的團隊在停車技術、香港法規合規及本地支付基礎設施方面擁有深厚專業知識。我們不只是銷售軟件——我們提供完整的端到端停車場運營轉型方案。",
       desc3:
-        "無論是單一住宅屋苑，還是管理 50 個商業停車場的物業組合，Londeo 均能隨您的業務成長而擴展。",
+        "無論您管理的是單一住宅屋苑，還是規模龐大的商業停車場組合，Londeo 的架構均設計為可隨業務發展而擴展。",
       values: [
-        { title: "本地專業", desc: "由深了解香港市場的本地團隊打造" },
-        { title: "企業級品質", desc: "99.9% 正常運行時間 SLA，企業級安全及數據主權" },
+        { title: "本地專業", desc: "由深了解香港停車場市場的團隊打造" },
+        { title: "企業級架構", desc: "為高可用性運作而設計，並採用企業級安全實踐" },
         { title: "全面整合", desc: "硬件、支付、報表——一個平台，零數據孤島" },
-        { title: "專屬支援", desc: "廣東話客戶支援團隊，每週六天為您服務" },
+        { title: "專屬支援", desc: "廣東話及英語本地支援團隊" },
       ],
     },
     contact: {
@@ -397,24 +396,31 @@ export const translations = {
       title: "在香港啟動您的",
       titleAccent: "智慧停車項目",
       subtitle:
-        "告訴我們您的物業詳情，我們將為您設計定制方案。大多數客戶可在 4–6 週內正式上線。",
+        "告訴我們您的物業詳情，我們將為您設計定制方案——由實地勘察到正式上線，全程支援。",
       form: {
         name: "您的姓名",
         company: "公司 / 物業名稱",
         email: "電郵地址",
         whatsapp: "WhatsApp 號碼",
-        projectType: "項目類型",
-        projectTypes: [
-          "商場停車場",
-          "住宅屋苑",
-          "商業大廈",
-          "政府 / 公共停車場",
-          "物業管理公司",
-          "其他",
+        emailOrWhatsapp: "請提供電郵地址或 WhatsApp 號碼",
+        enquiryType: "查詢類型",
+        enquiryTypes: [
+          "預約示範",
+          "索取報價",
+          "申請現場勘察",
+          "產品查詢",
+          "技術支援",
+          "一般查詢",
         ],
+        product: "產品（選填）",
+        productPlaceholder: "請選擇產品…",
+        projectLocation: "項目地點（選填）",
+        quantity: "數量（選填）",
+        currentSystem: "現有系統（選填）",
         message: "請簡述您的項目",
         submit: "發送查詢",
         success: "感謝您的查詢！我們將在一個工作日內與您聯絡。",
+        error: "發送查詢時發生問題，請直接透過下方 WhatsApp 或電郵聯絡我們。",
       },
       info: {
         title: "預約示範的好處",

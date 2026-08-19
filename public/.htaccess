@@ -21,8 +21,19 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Route everything else to index.html (SPA fallback)
-RewriteRule ^ /index.html [L]
+# Next.js static export (output: "export", default trailingSlash) writes one
+# <route>.html file per page (e.g. products/ai-lpr-camera.html), but every
+# <Link>/<a href> in the app points at the extensionless route. MultiViews is
+# off above, so map the extensionless URL to its generated .html file here.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*?)/?$ $1.html [L]
+
+# This is now a real multi-page static export (one .html file per route) —
+# unmatched paths get a genuine 404 instead of the old SPA-style fallback
+# that served index.html (with a 200 status) for every unknown URL.
+ErrorDocument 404 /404.html
 
 # Cache static assets aggressively
 <IfModule mod_expires.c>
